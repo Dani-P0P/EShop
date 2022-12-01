@@ -25,8 +25,41 @@ namespace EShop.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<List<CartProductResponseDTO>>>> StoreCartItems(List<CartItem> cartItems)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var result = await _cartService.StoreCartItems(cartItems, userId);
+            var result = await _cartService.StoreCartItems(cartItems);
+            return Ok(result);
+        }
+
+        [HttpPost("add")]
+        public async Task<ActionResult<ServiceResponse<bool>>> AddToCart(CartItem cartItem)
+        {
+            var result = await _cartService.AddToCart(cartItem);
+            return Ok(result);
+        }
+
+        [HttpPut("update-quantity")]
+        public async Task<ActionResult<ServiceResponse<bool>>> UpdateQuantity(CartItem cartItem)
+        {
+            var result = await _cartService.UpdateQuantity(cartItem);
+            return Ok(result);
+        }
+
+        [HttpDelete("{productId}/{productTypteId}")]
+        public async Task<ActionResult<ServiceResponse<bool>>> RemoveItemFromCart(int productId, int productTypteId)
+        {
+            var result = await _cartService.RemoveItemFromCart(productId, productTypteId);
+            return Ok(result);
+        }
+
+        [HttpGet("count")]
+        public async Task<ActionResult<ServiceResponse<int>>> GetCartItemsCount()
+        {
+            return await _cartService.GetCartItemsCount();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<List<CartProductResponseDTO>>>> GetDbCartProducts()
+        {
+            var result = await _cartService.GetDbCartProducts();
             return Ok(result);
         }
     }
